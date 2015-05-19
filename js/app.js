@@ -108,7 +108,7 @@ var CollapsingHeader = function(el, opts) {
 
 			var max = ((el.height() * 2) - opts.nav.height()) - 1;
 
-			if(pagePos >= max) {
+			if(pagePos >= max && !isSmall) {
 				pagePos = max;
 				$(window).scrollTop(max);
 			}
