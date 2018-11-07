@@ -1,3 +1,37 @@
+$(window).load(function() {
+	$(window).on('scroll', function(ev) {
+		$('header .bg').css({
+			'transform': 'translate3d(0, ' + (($(window).scrollTop() / $(document).height()) * 100) + '%, 0)'
+		});
+	});
+
+	var nav = $('.main-nav.sticky');
+
+    if(!nav.length) {
+        return;
+    }
+
+    var navSticky = nav.clone();
+
+    navSticky.addClass('hidden sticky-clone');
+
+    nav.before(navSticky);
+
+    $(document).on('scroll', checkStickiness);
+
+    function checkStickiness(ev) {
+        if($(window).scrollTop() >= nav.offset().top) {
+			nav.addClass('invisible');
+            navSticky.addClass('stuck');
+            navSticky.removeClass('hidden');
+        } else {
+			nav.removeClass('invisible');
+            navSticky.addClass('hidden');
+            navSticky.removeClass('stuck');
+        }
+	}
+});
+
 var isSmall;
 
 $(window).load(function() {
@@ -6,7 +40,7 @@ $(window).load(function() {
 	}
 
 	var collapsingHeader = new CollapsingHeader($('#header'), {
-		nav : $('#main-nav'),
+		nav : $('.main-nav'),
 		body : $('#main'),
 		scrollInterval : (isSmall) ? 2 : 2,
 		customElements : [
@@ -64,24 +98,16 @@ var CollapsingHeader = function(el, opts) {
 	var move = function move(pagePos) {
 		if(getScrollPercent(pagePos) < 1) {
 			if(highPerformance) {
-				opts.body.css({
-					'-webkit-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'-moz-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'-ms-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'-o-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'margin-top' : 0
-				});
-				opts.nav.css({
-					'-webkit-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'-moz-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'-ms-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'-o-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
-					'z-index' : 100,
-					position : 'relative',
-					top : 'auto'
-				});
+				// opts.nav.css({
+				// 	'-webkit-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
+				// 	'-moz-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
+				// 	'-ms-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
+				// 	'-o-transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
+				// 	'transform' : 'translate3d(0, ' + ('-' + pagePos + 'px') + ', 0)',
+				// 	'z-index' : 100,
+				// 	position : 'relative',
+				// 	top : 'auto'
+				// });
 				$('#logo-bg').addClass('hidden');
 				/*
 				logo.css({
@@ -97,34 +123,23 @@ var CollapsingHeader = function(el, opts) {
 				opts.body.css('margin-top', '-' + pagePos + 'px');
 			}
 		} else {
-			opts.nav.css({
-				'-webkit-transform' : 'translate3d(0, 0, 0)',
-				'-moz-transform' : 'translate3d(0, 0, 0)',
-				'-ms-transform' : 'translate3d(0, 0, 0)',
-				'-o-transform' : 'translate3d(0, 0, 0)',
-				'transform' : 'translate3d(0, 0, 0)',
-				'z-index' : 100,
-				position : 'fixed',
-				top : 0
-			});
+			// opts.nav.css({
+			// 	'-webkit-transform' : 'translate3d(0, 0, 0)',
+			// 	'-moz-transform' : 'translate3d(0, 0, 0)',
+			// 	'-ms-transform' : 'translate3d(0, 0, 0)',
+			// 	'-o-transform' : 'translate3d(0, 0, 0)',
+			// 	'transform' : 'translate3d(0, 0, 0)',
+			// 	'z-index' : 100,
+			// 	position : 'fixed',
+			// 	top : '75px'
+			// });
 
-			var max = ((el.height() * 2) - opts.nav.height()) - 1;
+			// var max = ((el.height() * 2) - opts.nav.height()) - 1;
 
-			if(pagePos >= max && !isSmall) {
-				pagePos = max;
-				$(window).scrollTop(max);
-			}
-
-			if(!isSmall) {
-				opts.body.css({
-					'-webkit-transform' : 'translate3d(0, ' + ('-' + (pagePos + 1) + 'px') + ', 0)',
-					'-moz-transform' : 'translate3d(0, ' + ('-' + (pagePos + 1) + 'px') + ', 0)',
-					'-ms-transform' : 'translate3d(0, ' + ('-' + (pagePos + 1) + 'px') + ', 0)',
-					'-o-transform' : 'translate3d(0, ' + ('-' + (pagePos + 1) + 'px') + ', 0)',
-					'transform' : 'translate3d(0, ' + ('-' + (pagePos + 1) + 'px') + ', 0)',
-					'margin-top' : opts.nav.outerHeight()
-				});
-			}
+			// if(pagePos >= max && !isSmall) {
+			// 	pagePos = max;
+			// 	$(window).scrollTop(max);
+			// }
 			
 			$('#logo-bg').removeClass('hidden');
 		}
@@ -134,9 +149,6 @@ var CollapsingHeader = function(el, opts) {
 		// ---Shim---
 		
 		if(getScrollPercent(pagePos) < 1) {
-			var headerHeight = el.height() * .45;
-
-
 			// find aspect
 			//console.log($('#logo img').width(), $('#logo img').height())
 			var aspect = $('#logo img').width() / $('#logo img').height();
@@ -166,8 +178,6 @@ var CollapsingHeader = function(el, opts) {
 				'margin-left' : (0 + (((el.width() / 2) - ((height * aspect) / 2)) * getScrollPercent(pagePos))) + 'px'
 			});
 
-			var logoWidth = $('#logo img').width();
-
 			$('#logo').css({
 				'-webkit-transform' : 'translate3d(0, ' + (pagePos + 'px') + ', 0)',
 				'-moz-transform' : 'translate3d(0, ' + (pagePos + 'px') + ', 0)',
@@ -194,7 +204,6 @@ var CollapsingHeader = function(el, opts) {
 					'margin-left' : 'auto'
 				});
 			}
-			
 
 			$('#logo').css({
 				'-webkit-transform' : 'translate3d(0, 0, 0)',
@@ -204,7 +213,7 @@ var CollapsingHeader = function(el, opts) {
 				'transform' : 'translate3d(0, 0, 0)',
 				position : 'fixed',
 				top : 0
-			})
+			});
 		}
 	};
 
