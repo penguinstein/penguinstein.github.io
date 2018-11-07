@@ -82,6 +82,12 @@ var CollapsingHeader = function(el, opts) {
 		$(window).on('scroll', function(ev) {
 			move($(window).scrollTop());
 		});
+		$(window).on('resize', function(ev) {
+			if($(window).width() <= 580) {
+				isSmall = true;
+			}
+			move($(window).scrollTop());
+		});
 		move($(window).scrollTop());
 	};
 
