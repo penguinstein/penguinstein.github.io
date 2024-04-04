@@ -1,6 +1,6 @@
 ---
 title: test post
 url: http://www.redbubble.com/people/penguinstein/portfolio
-img: storeSocial.jpg
+img: SocialPrints.jpg
 position: 3
 ---
